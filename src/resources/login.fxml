@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.LoginController" prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);">
+
+    <children>
+        <!-- Main Container -->
+        <VBox spacing="30" alignment="CENTER" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50"
+              AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50">
+
+            <!-- Title Section -->
+            <VBox spacing="5" alignment="CENTER">
+                <!-- Optional: Add your logo here -->
+                <!-- <ImageView fitHeight="64.0" fitWidth="64.0" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.png" />
+                    </image>
+                </ImageView> -->
+
+                <Label text="Garage Management System"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);"/>
+                <Label text="Please sign in to continue"
+                       style="-fx-font-size: 14px; -fx-text-fill: rgba(255,255,255,0.8);"/>
+            </VBox>
+
+            <!-- Login Form Container -->
+            <VBox spacing="20" alignment="CENTER" maxWidth="350" prefWidth="350"
+                  style="-fx-padding: 40 30 40 30; -fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 2);">
+
+                <!-- Username Field -->
+                <VBox spacing="8">
+                    <Label text="Username" style="-fx-font-weight: bold; -fx-text-fill: #333;"/>
+                    <TextField fx:id="usernameField" promptText="Enter your username"
+                               style="-fx-padding: 12; -fx-background-radius: 5; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-font-size: 14px;"
+                               onKeyPressed="#handleKeyPressed"/>
+                </VBox>
+
+                <!-- Password Field -->
+                <VBox spacing="8">
+                    <Label text="Password" style="-fx-font-weight: bold; -fx-text-fill: #333;"/>
+                    <PasswordField fx:id="passwordField" promptText="Enter your password"
+                                   style="-fx-padding: 12; -fx-background-radius: 5; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-font-size: 14px;"
+                                   onKeyPressed="#handleKeyPressed"/>
+                </VBox>
+
+                <!-- Remember Me and Forgot Password -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <CheckBox fx:id="rememberMeCheckBox" text="Remember me"
+                              style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Hyperlink text="Forgot Password?"
+                               style="-fx-text-fill: #0078d7; -fx-font-size: 12px;"
+                               onAction="#handleForgotPassword"/>
+                </HBox>
+
+                <!-- Error/Status Label -->
+                <Label fx:id="statusLabel" text=""
+                       style="-fx-text-fill: #d32f2f; -fx-font-size: 12px;"
+                       visible="false" managed="false"/>
+
+                <!-- Login Button -->
+                <Button fx:id="loginButton" text="Sign In" prefWidth="290" prefHeight="45"
+                        onAction="#handleLogin" defaultButton="true"
+                        style="-fx-background-color: linear-gradient(to bottom, #0078d7, #106ebe); -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"/>
+
+                <!-- Divider -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Separator prefWidth="100" HBox.hgrow="ALWAYS"/>
+                    <Label text="or" style="-fx-text-fill: #999; -fx-font-size: 12px;"/>
+                    <Separator prefWidth="100" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- Register Link -->
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Don't have an account?" style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
+                    <Hyperlink text="Create New Account"
+                               style="-fx-text-fill: #0078d7; -fx-font-size: 14px; -fx-font-weight: bold;"
+                               onAction="#handleRegister"/>
+                </VBox>
+            </VBox>
+
+            <!-- Footer -->
+            <Label text="© 2025 Garage Management System. All rights reserved."
+                   style="-fx-text-fill: rgba(255,255,255,0.6); -fx-font-size: 11px;"/>
+        </VBox>
+
+        <!-- Loading Indicator (Hidden by default) -->
+        <StackPane fx:id="loadingPane" visible="false" managed="false"
+                   style="-fx-background-color: rgba(0,0,0,0.3);"
+                   AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                   AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+            <ProgressIndicator prefHeight="50.0" prefWidth="50.0"
+                               style="-fx-progress-color: white;"/>
+        </StackPane>
+    </children>
+</AnchorPane>

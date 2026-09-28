@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.DashboardController"
+            prefWidth="1200" prefHeight="800"
+            style="-fx-background-color: #f5f7fa;">
+
+    <!-- Top: Enhanced Header with View Controls -->
+    <top>
+        <VBox style="-fx-background-color: linear-gradient(to right, #667eea 0%, #764ba2 100%); -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);">
+            <!-- Main Header -->
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <padding>
+                    <Insets top="15" right="20" bottom="15" left="20"/>
+                </padding>
+                <Label text="Parts Management Dashboard"
+                       style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- View Toggle Buttons -->
+                <HBox spacing="2" alignment="CENTER"
+                      style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 8;">
+                    <padding>
+                        <Insets top="2" right="2" bottom="2" left="2"/>
+                    </padding>
+                    <Button fx:id="gridViewBtn" text="🔲"
+                            style="-fx-background-color: rgba(255,255,255,0.9); -fx-text-fill: #333; -fx-background-radius: 6; -fx-padding: 6 12 6 12; -fx-font-size: 12px;"/>
+                    <Button fx:id="listViewBtn" text="📋"
+                            style="-fx-background-color: transparent; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12 6 12; -fx-font-size: 12px;"/>
+                    <Button fx:id="tableViewBtn" text="📊"
+                            style="-fx-background-color: transparent; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12 6 12; -fx-font-size: 12px;"/>
+                </HBox>
+
+                <!-- User Info and Sign Out -->
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <VBox alignment="CENTER_RIGHT" spacing="2">
+                        <Label fx:id="userNameLabel" text="Welcome, Admin"
+                               style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+                        <Label fx:id="statusLabel" text="Ready"
+                               style="-fx-text-fill: #e8f4fd; -fx-font-size: 11px;"/>
+                    </VBox>
+                    <Button fx:id="signOutBtn" text="🚪 Sign Out"
+                            style="-fx-background-color: rgba(255,255,255,0.15); -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 15 8 15; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                </HBox>
+            </HBox>
+
+            <!-- Enhanced Search and Filter Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="15"
+                  style="-fx-background-color: rgba(255,255,255,0.1);">
+                <padding>
+                    <Insets top="12" right="20" bottom="12" left="20"/>
+                </padding>
+
+                <!-- Search Section -->
+                <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="🔍" style="-fx-text-fill: white; -fx-font-size: 16px;"/>
+                    <TextField fx:id="searchField"
+                               promptText="Search parts by name, ID, or category..."
+                               prefWidth="300"
+                               style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 20; -fx-padding: 8 15 8 15; -fx-font-size: 13px;"/>
+
+                    <!-- Category Filter -->
+                    <ComboBox fx:id="categoryFilter" promptText="All Categories"
+                              style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 6; -fx-padding: 6 12 6 12;"/>
+
+                    <!-- Status Filter -->
+                    <ComboBox fx:id="statusFilter" promptText="All Status"
+                              style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 6; -fx-padding: 6 12 6 12;"/>
+                </HBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="8">
+                    <Button fx:id="addPartBtn" text="➕ Add New"
+                            style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16 8 16; -fx-font-weight: bold;"/>
+                    <Button fx:id="editPartBtn" text="✏️ Edit"
+                            style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16 8 16; -fx-font-weight: bold;"/>
+                    <Button fx:id="deletePartBtn" text="🗑️ Delete"
+                            style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16 8 16; -fx-font-weight: bold;"/>
+                </HBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center: Visual Parts Grid -->
+    <center>
+        <HBox spacing="15" style="-fx-background-color: transparent;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <!-- Left: Visual Parts Grid -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS">
+
+                <!-- Grid Header with Stats -->
+                <HBox alignment="CENTER_LEFT" spacing="20"
+                      style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 15 20 15 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 6, 0, 0, 2);">
+                    <Label text="📦 Parts Inventory"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <!-- Quick Stats -->
+                    <HBox spacing="20">
+                        <VBox alignment="CENTER" spacing="2">
+                            <Label fx:id="totalPartsLabel" text="0"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+                            <Label text="Total Parts"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #7f8c8d;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="2">
+                            <Label fx:id="inStockLabel" text="0"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                            <Label text="In Stock"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #7f8c8d;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="2">
+                            <Label fx:id="lowStockLabel" text="0"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
+                            <Label text="Low Stock"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #7f8c8d;"/>
+                        </VBox>
+                    </HBox>
+                </HBox>
+
+                <!-- Parts Grid Container -->
+                <ScrollPane fx:id="partsScrollPane"
+                            fitToWidth="true"
+                            hbarPolicy="NEVER"
+                            vbarPolicy="AS_NEEDED"
+                            VBox.vgrow="ALWAYS"
+                            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+                    <!-- Grid Layout - This would be populated programmatically -->
+                    <FlowPane fx:id="partsGrid"
+                              hgap="15"
+                              vgap="15"
+                              alignment="TOP_LEFT"
+                              style="-fx-background-color: transparent;">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+
+                        <!-- Example Part Card (Template) -->
+                        <VBox spacing="0" prefWidth="280" maxWidth="280"
+                              style="-fx-background-color: white;
+                                     -fx-background-radius: 12;
+                                     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2);
+                                     -fx-border-color: #e9ecef;
+                                     -fx-border-width: 1;
+                                     -fx-border-radius: 12;">
+
+                            <!-- Card Header with Image -->
+                            <VBox alignment="CENTER" spacing="8"
+                                  style="-fx-background-color: #f8f9fa; -fx-background-radius: 12 12 0 0; -fx-padding: 15 15 15 15;">
+                                <ImageView fitWidth="80" fitHeight="80" preserveRatio="true"
+                                           style="-fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);"/>
+                                <!-- Status Badge -->
+                                <Label text="🟢 In Stock"
+                                       style="-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-background-radius: 12; -fx-padding: 4 8 4 8; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                            </VBox>
+
+                            <!-- Card Content -->
+                            <VBox spacing="12" style="-fx-padding: 15 15 15 15;">
+                                <!-- Part Name -->
+                                <Label text="Engine Filter XZ-123"
+                                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"
+                                       wrapText="true"/>
+
+                                <!-- Part Details Grid -->
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label text="CATEGORY"
+                                               style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #7f8c8d;"/>
+                                        <Label text="Engine"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #2c3e50;"/>
+                                    </VBox>
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label text="STOCK"
+                                               style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #7f8c8d;"/>
+                                        <Label text="25"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #2c3e50;"/>
+                                    </VBox>
+                                    <VBox spacing="4" alignment="CENTER_RIGHT">
+                                        <Label text="PRICE"
+                                               style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #7f8c8d;"/>
+                                        <Label text=""
+                                               style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                                    </VBox>
+                                </HBox>
+
+                                <!-- Stock Level Bar -->
+                                <VBox spacing="4">
+                                    <HBox alignment="CENTER_LEFT" spacing="8">
+                                        <Label text="Stock Level"
+                                               style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #7f8c8d;"/>
+                                        <Label text="High"
+                                               style="-fx-font-size: 9px; -fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+                                    </HBox>
+                                    <ProgressBar progress="0.8" prefWidth="250"
+                                                 style="-fx-accent: #27ae60; -fx-background-color: #ecf0f1;"/>
+                                </VBox>
+
+                                <!-- Action Buttons -->
+                                <HBox spacing="6" alignment="CENTER">
+                                    <Button text="👁️ View"
+                                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12 6 12; -fx-font-size: 10px;"/>
+                                    <Button text="✏️ Edit"
+                                            style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12 6 12; -fx-font-size: 10px;"/>
+                                    <Button text="📋 Copy"
+                                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12 6 12; -fx-font-size: 10px;"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- More cards would be added programmatically -->
+                    </FlowPane>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Right: Enhanced Details Panel -->
+            <VBox spacing="0" prefWidth="320" minWidth="320" maxWidth="320"
+                  style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+
+                <!-- Details Header -->
+                <HBox alignment="CENTER_LEFT"
+                      style="-fx-background-color: linear-gradient(to right, #667eea, #764ba2); -fx-background-radius: 12 12 0 0;">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <Label text="📋 Part Details"
+                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                </HBox>
+
+                <!-- Enhanced Details Content -->
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS"
+                            style="-fx-background-color: transparent; -fx-background: transparent;">
+                    <VBox spacing="20">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Large Image Display -->
+                        <VBox alignment="CENTER" spacing="10"
+                              style="-fx-background-color: #f8f9fa; -fx-background-radius: 12; -fx-border-color: #dee2e6; -fx-border-radius: 12; -fx-border-width: 1;">
+                            <padding>
+                                <Insets top="15" right="15" bottom="15" left="15"/>
+                            </padding>
+                            <ImageView fx:id="partImage" fitWidth="200" fitHeight="200" preserveRatio="true"/>
+                            <Button text="📷 Change Image"
+                                    style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12 6 12; -fx-font-size: 10px;"/>
+                        </VBox>
+
+                        <!-- Enhanced Info Cards -->
+                        <VBox spacing="12">
+                            <!-- Part Name Card -->
+                            <VBox spacing="6" style="-fx-background-color: #fff; -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1; -fx-padding: 12 15 12 15;">
+                                <Label text="PART NAME" style="-fx-text-fill: #6c757d; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                                <Label fx:id="labelPartName" text="Select a part to view details"
+                                       wrapText="true" style="-fx-text-fill: #2c3e50; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                            </VBox>
+
+                            <!-- Price & Stock Row -->
+                            <HBox spacing="8">
+                                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color: #fff; -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1; -fx-padding: 12 15 12 15;">
+                                    <Label text="PRICE" style="-fx-text-fill: #6c757d; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="labelPartPrice" text=" " style="-fx-text-fill: #27ae60; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                </VBox>
+                                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color: #fff; -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1; -fx-padding: 12 15 12 15;">
+                                    <Label text="STOCK" style="-fx-text-fill: #6c757d; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="labelStock" text="0" style="-fx-text-fill: #2c3e50; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Status & Category Row -->
+                            <HBox spacing="8">
+                                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color: #fff; -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1; -fx-padding: 12 15 12 15;">
+                                    <Label text="STATUS" style="-fx-text-fill: #6c757d; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="labelAvailability" text="Available" style="-fx-text-fill: #27ae60; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                                </VBox>
+                                <VBox spacing="6" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color: #fff; -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1; -fx-padding: 12 15 12 15;">
+                                    <Label text="CATEGORY" style="-fx-text-fill: #6c757d; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="labelCategory" text="General" style="-fx-text-fill: #2c3e50; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Description -->
+                            <VBox spacing="6" style="-fx-background-color: #fff; -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1; -fx-padding: 12 15 12 15;">
+                                <Label text="DESCRIPTION" style="-fx-text-fill: #6c757d; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+                                <Label fx:id="labelDescription" text="No description available" wrapText="true"
+                                       style="-fx-text-fill: #6c757d; -fx-font-size: 11px; -fx-line-spacing: 2;"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Enhanced Action Buttons -->
+                        <VBox spacing="8">
+                            <Separator/>
+                            <VBox spacing="8">
+                                <Button fx:id="viewDetailsBtn" text="👁️ View Full Details" maxWidth="Infinity"
+                                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 15 10 15; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                                <HBox spacing="8">
+                                    <Button fx:id="duplicateBtn" text="📋 Duplicate" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 12 8 12; -fx-font-size: 11px;"/>
+                                    <Button fx:id="printBtn" text="🖨️ Print" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 12 8 12; -fx-font-size: 11px;"/>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- Bottom: Enhanced Status Bar -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="20"
+              style="-fx-background-color: white; -fx-border-color: #dee2e6; -fx-border-width: 1 0 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 4, 0, 0, -2);">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label fx:id="lastUpdatedLabel" text="Last updated: Never"
+                   style="-fx-text-fill: #6c757d; -fx-font-size: 11px;"/>
+            <Label text="•" style="-fx-text-fill: #dee2e6;"/>
+            <Label text="Connected" style="-fx-text-fill: #27ae60; -fx-font-size: 11px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="versionLabel" text="Version 2.0"
+                   style="-fx-text-fill: #6c757d; -fx-font-size: 11px;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
